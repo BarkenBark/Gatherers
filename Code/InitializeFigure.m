@@ -10,4 +10,6 @@ colormap('summer')
 titleHandle = title(titleString);
 hold on
 
+colorbar;
+
 end

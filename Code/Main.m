@@ -22,6 +22,7 @@ agentColor = [1 0 0];
 
 
 
+
 %% Run simulation
 landscape = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
 [positions] = InitializeAgents(nbrOfAgents, gridLength);
@@ -31,6 +32,8 @@ landscapeHandle = PlotLandscape(landscape);
 agentsHandle = PlotAgents(positions, agentColor);
 uistack(agentsHandle, 'top')
 
+%%
+
 isSimulationRunning = true;
 while isSimulationRunning
   landscape = Collect(landscape, positions);
@@ -39,6 +42,9 @@ while isSimulationRunning
   
   landscapeHandle = PlotLandscape(landscape, landscapeHandle);
   agentsHandle = PlotAgents(positions, agentColor, agentsHandle);
+  uistack(agentsHandle, 'top')
+  drawnow
+  %isSimulationRunning = false;
 end
 
 
