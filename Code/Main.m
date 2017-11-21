@@ -13,6 +13,7 @@ diffusionSteps = 10;
 %Interface
 figureSize = 800;
 titleString = 'Landscape';
+agentColor = 'red';
 
 %Misc setting
 
@@ -20,19 +21,29 @@ titleString = 'Landscape';
 
 
 %% Run simulation
-
 landscape = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
-[positions] = InitializeAgents(nbrOfAgents);
+[positions] = InitializeAgents(nbrOfAgents, gridLength);
 
 [figureHandle, titleHandle] = InitializeFigure(figureSize, titleString);
 landscapeHandle = PlotLandscape(landscape);
-agentsHandle = PlotAgents(positions);
+agentsHandle = PlotAgents(positions, agentColor);
 
+isSimulationRunning = true;
 while isSimulationRunning
   landscape = Collect(landscape, positions);
   landscape = GrowResources(landscape, growthRate);
-  positions = UpdatePosition(nbrOfAgents, positions, landscape, diffusionRate);
+  positions = UpdatePositions(nbrOfAgents, positions, landscape, diffusionRate);
   
   landscapeHandle = PlotLandscape(landscape, landscapeHandle);
   agentsHandle = PlotAgents(positions, agentsHandle);
 end
+
+
+
+
+
+
+
+
+
+

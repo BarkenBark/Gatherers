@@ -15,8 +15,10 @@ for iAgent=1:numberOfAgents
         end
     end
 end
-    % Apply boundary conditions
-positions = mod(tempPositions,grid);
+    % Apply boundary conditions'
+    size(tempPositions)
+    size(grid)
+positions = mod(tempPositions, grid);
 end
 
 
