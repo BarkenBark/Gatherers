@@ -1,4 +1,5 @@
-function[positions]=UpdatePositions(numberOfAgents,positions,grid,diffusionRate)    
+function positions = UpdatePositions(numberOfAgents, positions, gridLength, diffusionRate)
+
 tempPositions=positions;
 
 for iAgent=1:numberOfAgents
@@ -15,12 +16,8 @@ for iAgent=1:numberOfAgents
         end
     end
 end
-    % Apply boundary conditions'
-positions = mod(tempPositions, grid) + 1;
+
+% Apply periodic boundary condition
+positions = mod(tempPositions-1, gridLength)+1;
+
 end
-
-
-
-
-
-    
