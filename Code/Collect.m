@@ -12,7 +12,7 @@ function [grid, inventory] = Collect(grid, inventory, positions, hunger, collect
     for i = 1:numberOfGatherers
         xPos = positions(i,1);
         yPos = positions(i,2);
-        grid(xPos,yPos) = grid(xPos,yPos) - collection;
+        grid(xPos,yPos) = grid(xPos,yPos) - collection(i);
         %grid(xPos,yPos) = grid(xPos,yPos) * collectionRate; %Depends on how we want to define it
         
         %Check thresholds

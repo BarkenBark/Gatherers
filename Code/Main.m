@@ -4,11 +4,11 @@ close all;
 
 %Problem Parameters
 gridLength = 100;
-nbrOfAgents = 1000;
+initialNbrOfAgents = 1000;
 diffusionRate = 0.1;
 growthRate = 0.5;
 collectionRate = 0.5;
-hungerRate = 1; %Value in [0,1], 0 -> collect nothing, 1 -> collect everything 
+hungerRate = 0.01;
 collectionCapPerTimeStep = 1/100;
 
 percentBestLand = 0.25;
@@ -18,12 +18,12 @@ eps = 0.01; %Always add this value to all resorces to make sure complete depleti
 
 %Measures
 estimatedTimeSteps = 1000; %To pre-allocate measure-vectors for performance
-nbrOfResources = zeros(estimatedTimeStep, 1);
-nbrOfGatherers = zeros(estimatedTimeStep, 1);
+nbrOfResources = zeros(estimatedTimeSteps, 1);
+nbrOfGatherers = zeros(estimatedTimeSteps, 1);
 
 %Interface
 figureSize = 800;
-titleString = 'Landscape';
+landscapeTitleString = 'Landscape';
 agentColor = [1 0 0];
 
 %Misc setting
@@ -31,13 +31,15 @@ agentColor = [1 0 0];
 
 %% Run simulation
 landscape = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
-[positions, inventory, hunger] = InitializeAgents(nbrOfAgents, gridLength);
+[positions, inventory, hunger] = InitializeAgents(initialNbrOfAgents, gridLength);
 %WARNING: stateVector(i,:) should always correspond to the ith agent
 
-[figureHandle, titleHandle] = InitializeFigure(figureSize, titleString);
+[landscapeFigureHandle, landscapeTitleHandle] = InitializeFigure(figureSize, landscapeTitleString);
 landscapeHandle = PlotLandscape(landscape);
 agentsHandle = PlotAgents(positions, agentColor);
 uistack(agentsHandle, 'top')
+
+%[resourceFigureHandle, resourceTitleHandle] = InitializeFigure(figureSize, )
 
 %%
 
@@ -46,17 +48,17 @@ isSimulationRunning = true;
 while isSimulationRunning
   t = t+1;
   
-  collectionRate = GetCollectionRate(hunger); %vector
-  [landscape, inventory] = Collect(landscape, inventory, positions, collectionRate);
-  [hunger, inventory] = EatResources(hunger, inventory);
+  [landscape, inventory] = Collect(landscape, inventory, positions, hunger, collectionCapPerTimeStep);
+  [hunger, inventory] = EatResources(hunger, inventory, hungerRate);
   [positions, inventory, hunger] = KillAgents(positions, inventory, hunger);
   
-  positions = UpdatePositions(nbrOfAgents, positions, gridLength, diffusionRate);
+  positions = UpdatePositions(positions, gridLength, diffusionRate);
   
-  landscape = GrowResources(landscape, growthRate, eps);
+  landscape = GrowResources(landscape, growthRate);
 
   %Measuring
-  nbrOfResources(t) = GetNbrOfResources(landcape, 1);
+  thisNbrOfResources = GetNbrOfResources(landscape, 1); %Because the function is stupid andreturns a cell instead of double
+  nbrOfResources(t) = thisNbrOfResources{1};
   nbrOfGatherers(t) = length(inventory); %Arbitrary choice
   
   %Plotting
@@ -65,6 +67,15 @@ while isSimulationRunning
   uistack(agentsHandle, 'top')
   drawnow
   %isSimulationRunning = false;
+  
+  %Stopping conditions
+  if nbrOfGatherers(t) == 0
+    disp('All gatherers are dead')
+    isSimulationRunning = false;
+  end
+  
+  
+  
 end
 
 

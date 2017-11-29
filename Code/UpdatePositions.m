@@ -1,6 +1,7 @@
-function positions = UpdatePositions(numberOfAgents, positions, gridLength, diffusionRate)
+function positions = UpdatePositions(positions, gridLength, diffusionRate)
 
 tempPositions=positions;
+numberOfAgents = size(positions, 1);
 
 for iAgent=1:numberOfAgents
     if rand<diffusionRate
