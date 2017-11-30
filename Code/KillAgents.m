@@ -2,7 +2,7 @@ function [positions, inventory, hunger] = KillAgents(positions, inventory, hunge
 %Simply drop the rows corresponding to the agents whose hungers are above a
 %certain threshold
 
-  nbrOfAgents = size(positions, 1)
+  nbrOfAgents = size(positions, 1);
   threshold = 0.8;
 
   toKill = [];
