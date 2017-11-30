@@ -5,7 +5,7 @@ function grid = Collect(grid, positions)
     for i = 1:numberOfGatherers
         xPos = positions(i,1);
         yPos = positions(i,2);
-        grid(xPos,yPos) = 0;
+        grid(xPos,yPos) = 0.1 .* grid(xPos,yPos) .* (1 - grid(xPos,yPos));
     end
     
 end
