@@ -1,23 +1,33 @@
-function positions = UpdatePositions(numberOfAgents, positions, gridLength, diffusionRate)
-
-tempPositions=positions;
+function positions = UpdatePositions(positions, grid, diffusionRate)
+numberOfAgents = length(positions);
+tempPositions = positions;
+neighbors = [
+     0 -1;
+     0 +1;
+    -1  0;
+    +1  0;
+];
+noise=0.99;
+nbNeighbors = length(neighbors);
+gridLength = length(grid);
+willMove = rand(numberOfAgents) < diffusionRate;
 
 for iAgent=1:numberOfAgents
-    if rand<diffusionRate
-        step=randi(4);
-        if step==1
-            tempPositions(iAgent,1)=positions(iAgent,1)+1;
-        elseif step==2
-            tempPositions(iAgent,2)=positions(iAgent,2)+1;
-        elseif step==3
-            tempPositions(iAgent,1)=positions(iAgent,1)-1;
-        else
-            tempPositions(iAgent,2)=positions(iAgent,2)-1;
+    if willMove(iAgent)
+        neighborsPos = positions(iAgent,:) + neighbors;
+        
+        % Apply periodic boundary condition
+        neighborsPos = mod(neighborsPos - 1, gridLength) + 1;
+        
+        neighborsValues = zeros([nbNeighbors 1]);
+        for i = 1:nbNeighbors
+           neighborsValues(i) = (1-noise)*grid(neighborsPos(i,1),neighborsPos(i,2))+noise*rand();
         end
+        [~, indexMaxValue] = max(neighborsValues);
+        tempPositions(iAgent,:) = neighborsPos(indexMaxValue,:);
     end
 end
 
-% Apply periodic boundary condition
-positions = mod(tempPositions-1, gridLength)+1;
+positions = tempPositions;
 
 end
