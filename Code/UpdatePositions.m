@@ -1,4 +1,5 @@
 function positions = UpdatePositions(positions, grid, diffusionRate)
+
 numberOfAgents = length(positions);
 tempPositions = positions;
 neighbors = [
