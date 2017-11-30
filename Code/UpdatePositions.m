@@ -1,4 +1,4 @@
-function positions = UpdatePositions(positions, gridLength, diffusionRate)
+function positions = UpdatePositions(positions, grid, diffusionRate)
 
 tempPositions=positions;
 numberOfAgents = size(positions, 1);
