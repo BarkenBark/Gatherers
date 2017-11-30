@@ -6,9 +6,9 @@ close all;
 gridLength = 100;
 initialNbrOfAgents = 1000;
 diffusionRate = 0.1;
-growthRate = 0.3;
+growthRate = 0.1;
 hungerRate = 0.1;
-collectionCapPerTimeStep = 1/100;
+collectionRate = growthRate;
 
 percentBestLand = 0.1;
 maxResourceLevel = 1;
@@ -49,8 +49,8 @@ isSimulationRunning = true;
 while isSimulationRunning
   t = t+1;
   
-  [landscape, inventory] = Collect(landscape, inventory, positions, hunger, collectionCapPerTimeStep);
-  [hunger, inventory] = EatResources(hunger, inventory, hungerRate);
+  [landscape, inventory] = Collect(landscape, inventory, positions, hunger, collectionRate);
+  %[hunger, inventory] = EatResources(hunger, inventory, hungerRate);
   [positions, inventory, hunger] = KillAgents(positions, inventory, hunger);
   
   positions = UpdatePositions(positions, landscape, diffusionRate);
@@ -75,8 +75,8 @@ while isSimulationRunning
   end
   
   %Misc. debugging
-  %fprintf('Inventory of agent 1 is: %.4f\n', inventory(1));
-  %fprintf('Hunger of agent 1 is: %.2f\n', hunger(1));
+  fprintf('Inventory of agent 1 is: %.4f\n', inventory(1));
+  fprintf('Hunger of agent 1 is: %.2f\n', hunger(1));
   
   
 end
