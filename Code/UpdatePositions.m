@@ -1,6 +1,6 @@
 function positions = UpdatePositions(positions, grid, diffusionRate)
 
-numberOfAgents = length(positions);
+numberOfAgents = size(positions,1);
 tempPositions = positions;
 neighbors = [
      0 -1;
