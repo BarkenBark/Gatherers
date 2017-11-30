@@ -75,8 +75,8 @@ while isSimulationRunning
   end
   
   %Misc. debugging
-  fprintf('Inventory of agent 1 is: %.4f\n', inventory(1));
-  fprintf('Hunger of agent 1 is: %.2f\n', hunger(1));
+  %fprintf('Inventory of agent 1 is: %.4f\n', inventory(1));
+  %fprintf('Hunger of agent 1 is: %.2f\n', hunger(1));
   
   
 end
