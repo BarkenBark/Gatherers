@@ -11,10 +11,9 @@ for i = 1:nbrOfAgents
   yPos = positions(i,2);
   newVal = collectionRate * grid(xPos,yPos) * (1 - grid(xPos,yPos)); % maximum sustainable yield
   collection(i) = grid(xPos,yPos) - newVal;
-  grid(xPos,yPos) = newGrid(xPos, yPos);
+  grid(xPos,yPos) = newVal;
 end
 
 inventory = inventory + collection;
-
     
 end
