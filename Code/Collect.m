@@ -5,13 +5,12 @@ function [grid, inventory] = Collect(grid, inventory, positions, hunger, collect
 nbrOfAgents = size(positions, 1);
 
 gridLength = size(grid, 1);
-newGrid = zeros(gridLength);
 collection = zeros(nbrOfAgents, 1);
 for i = 1:nbrOfAgents
   xPos = positions(i,1);
   yPos = positions(i,2);
-  newGrid(xPos,yPos) = collectionRate * grid(xPos,yPos) * (1 - grid(xPos,yPos)); % maximum sustainable yield
-  collection(i) = grid(xPos,yPos) - newGrid(xPos,yPos);
+  newVal = collectionRate * grid(xPos,yPos) * (1 - grid(xPos,yPos)); % maximum sustainable yield
+  collection(i) = grid(xPos,yPos) - newVal;
   grid(xPos,yPos) = newGrid(xPos, yPos);
 end
 
