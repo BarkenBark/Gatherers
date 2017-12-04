@@ -56,6 +56,9 @@ while isSimulationRunning
   positions = UpdatePositions(positions, landscape, diffusionRate);
   
   landscape = GrowResources(landscape, growthRate);
+  % Apply resource level limits
+  landscape = Clamp(landscape, minResourceLevel, maxResourceLevel);
+    
   %Measuring
   thisNbrOfResources = GetNbrOfResources(landscape, 1); %Because the function is stupid andreturns a cell instead of double
   nbrOfResources(t) = thisNbrOfResources{1};
