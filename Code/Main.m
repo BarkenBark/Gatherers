@@ -6,9 +6,9 @@ close all;
 gridLength = 100;
 initialNbrOfAgents = 1000;
 diffusionRate = 0.4;
-growthRate = ones(gridLength) .* 0.05;
+growthRate = ones(gridLength) .* 0.01;
 hungerRate = 0.1;
-collectionRate = growthRate;
+collectionRate = 10*growthRate;
 
 percentBestLand = 0.01;
 minResourceLevel = 0;
@@ -31,7 +31,7 @@ agentColor = [1 0 0];
 
 
 %% Run simulation
-landscape = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
+landscape = ones(gridLength) * 0.2;%InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
 growthRate = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
 [positions, inventory, hunger] = InitializeAgents(initialNbrOfAgents, gridLength);
 %WARNING: stateVector(i,:) should always correspond to the ith agent
@@ -64,7 +64,14 @@ while isSimulationRunning
 %      0, 1, 0
 %    ] ./ 6, 'circular');
   %growthRate = growthRate + 0.000001;
-  collectionRate = 1.2*growthRate;
+  
+  if mod(t,200) == 0
+      disp("growth reset");
+    growthRate = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
+    collectionRate = 10*growthRate;
+  end
+  
+  
   landscape = GrowResources(landscape, growthRate);
   landscape = landscape + rand(gridLength)*0.000001;
 
