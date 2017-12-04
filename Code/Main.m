@@ -10,7 +10,7 @@ growthRate = ones(gridLength) .* 0.05;
 hungerRate = 0.1;
 collectionRate = growthRate;
 
-percentBestLand = 0.005;
+percentBestLand = 0.01;
 minResourceLevel = 0;
 maxResourceLevel = 1;
 
@@ -31,7 +31,8 @@ agentColor = [1 0 0];
 
 
 %% Run simulation
-landscape = ones(gridLength) .* maxResourceLevel * 0.05;%InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
+landscape = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
+growthRate = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
 [positions, inventory, hunger] = InitializeAgents(initialNbrOfAgents, gridLength);
 %WARNING: stateVector(i,:) should always correspond to the ith agent
 
@@ -56,13 +57,14 @@ while isSimulationRunning
   
   positions = UpdatePositions(positions, landscape, diffusionRate);
   
-  smoothRate = 0.05;
-  growthRate = imfilter(growthRate, [
-    0, 1, 0;
-    1, 2, 1;
-    0, 1, 0
-  ] ./ 6, 'circular');
-  collectionRate = growthRate;
+%   smoothRate = 0.05;
+%    growthRate = imfilter(growthRate, [
+%      0, 1, 0;
+%      1, 2, 1;
+%      0, 1, 0
+%    ] ./ 6, 'circular');
+  %growthRate = growthRate + 0.000001;
+  collectionRate = 1.2*growthRate;
   landscape = GrowResources(landscape, growthRate);
   landscape = landscape + rand(gridLength)*0.000001;
 
@@ -88,8 +90,8 @@ while isSimulationRunning
   end
   
   %Misc. debugging
-  fprintf('Inventory of agent 1 is: %.4f\n', inventory(1));
-  fprintf('Hunger of agent 1 is: %.2f\n', hunger(1));
+  %fprintf('Inventory of agent 1 is: %.4f\n', inventory(1));
+  %fprintf('Hunger of agent 1 is: %.2f\n', hunger(1));
   
   
 end

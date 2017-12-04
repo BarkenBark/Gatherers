@@ -8,7 +8,7 @@ neighbors = [
     -1  0;
     +1  0;
 ];
-noise=0.1;
+noise=0.05;
 nbNeighbors = length(neighbors);
 gridLength = length(grid);
 % willMove = rand(numberOfAgents) < diffusionRate;
@@ -18,7 +18,7 @@ moveLikeliness = (1-noise).*moveLikeliness + noise.*rand(gridLength);
 
 for iAgent=1:numberOfAgents
     agentPos = positions(iAgent,:);
-    willMove = rand() < (diffusionRate / grid(agentPos(1), agentPos(2)));
+    willMove = rand() < (diffusionRate * (1-grid(agentPos(1), agentPos(2))));
     if willMove
         neighborsPos = agentPos + neighbors;
         
