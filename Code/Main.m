@@ -29,7 +29,7 @@ agentColor = [1 0 0];
 
 %Initial lanscape state
 landscape = ones(gridLength) * 0.05 + rand(gridLength)*landscapeNoise;
-growthRate = InitializeGrid(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
+growthRate = RandomNoisePattern(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
 collectionRate = collectionGrowthRatio * growthRate;
 
 %% Run simulation
@@ -58,7 +58,7 @@ while isSimulationRunning
 
   if mod(t, growthRateResetInterval) == 0
     disp("growth reset");
-    growthRate = InitializeGrid(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
+    growthRate = RandomNoisePattern(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
     collectionRate = collectionGrowthRatio * growthRate;
   end
   
