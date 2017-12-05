@@ -7,15 +7,13 @@ gridLength = 100;
 initialNbrOfAgents = 1000;
 diffusionRate = 0.4;
 growthRate = ones(gridLength) .* 0.01;
-hungerRate = 0.1;
+hungerRate = 0.01;
 collectionRate = 10*growthRate;
 
 percentBestLand = 0.01;
 minResourceLevel = 0;
 maxResourceLevel = 1;
-
 diffusionSteps = 20;
-eps = 0.01; %Always add this value to all resorces to make sure complete depletion doesn't permanently destroy the field
 
 %Measures
 estimatedTimeSteps = 1000; %To pre-allocate measure-vectors for performance
@@ -33,7 +31,7 @@ agentColor = [1 0 0];
 %% Run simulation
 landscape = ones(gridLength) * 0.2;%InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
 growthRate = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
-[positions, inventory, hunger] = InitializeAgents(initialNbrOfAgents, gridLength);
+[positions, inventory] = InitializeAgents(initialNbrOfAgents, gridLength);
 %WARNING: stateVector(i,:) should always correspond to the ith agent
 
 
@@ -51,8 +49,8 @@ isSimulationRunning = true;
 while isSimulationRunning
   t = t+1;
   
-  [landscape, inventory] = Collect(landscape, inventory, positions, hunger, collectionRate);
-  %[hunger, inventory] = EatResources(hunger, inventory, hungerRate);
+  [landscape, inventory] = Collect(landscape, inventory, positions, collectionRate);
+  [inventory, positions] = EatResources(inventory, positions, hungerRate);
   %[positions, inventory, hunger] = KillAgents(positions, inventory, hunger);
   
   positions = UpdatePositions(positions, landscape, diffusionRate);
@@ -74,7 +72,6 @@ while isSimulationRunning
   
   landscape = GrowResources(landscape, growthRate);
   landscape = landscape + rand(gridLength)*0.000001;
-
   % Apply resource level limits
   landscape = Clamp(landscape, minResourceLevel, maxResourceLevel);
     

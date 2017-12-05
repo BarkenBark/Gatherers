@@ -1,4 +1,4 @@
-function [positions, inventory] = EatResources(inventory, positions, hungerRate)
+function [inventory, positions] = EatResources(inventory, positions, hungerRate)
 %The hungrier an agent is, the more it should eat regardless of inventory
 
   inventory = inventory - hungerRate;

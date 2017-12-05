@@ -13,7 +13,7 @@ nbNeighbors = length(neighbors);
 gridLength = length(grid);
 % willMove = rand(numberOfAgents) < diffusionRate;
 
-moveLikeliness = grid;%imfilter(grid, ones(3^2)./3^2, 'circular');
+moveLikeliness = grid; %imfilter(grid, ones(3^2)./3^2, 'circular');
 moveLikeliness = (1-noise).*moveLikeliness + noise.*rand(gridLength);
 
 for iAgent=1:numberOfAgents
