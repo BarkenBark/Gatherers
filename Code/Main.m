@@ -5,17 +5,17 @@ close all;
 %Problem Parameters
 gridLength = 100;
 initialNbrOfAgents = 1000;
-diffusionRate = 0.4;
-hungerRate = 0.1;
+diffusionRate = 0.2;
+hungerRate = 0.005;
 collectionGrowthRatio = 10;
+growthRateResetInterval = 800;
+landscapeNoise = 10^(-6);
 
 percentHigherResources = 0.01;
 minResourceLevel = 0;
 maxResourceLevel = 1;
 maxGrowthRate = 1;
-
-diffusionSteps = 20;
-eps = 0.01; %Always add this value to all resorces to make sure complete depletion doesn't permanently destroy the field
+diffusionSteps = 15;
 
 %Measures
 estimatedTimeSteps = 1000; %To pre-allocate measure-vectors for performance
@@ -28,8 +28,7 @@ landscapeTitleString = 'Landscape';
 agentColor = [1 0 0];
 
 %Initial lanscape state
-growthRate = ones(gridLength) .* 0.01;
-landscape = ones(gridLength) * 0.2;
+landscape = ones(gridLength) * 0.05 + rand(gridLength)*landscapeNoise;
 growthRate = InitializeGrid(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
 collectionRate = collectionGrowthRatio * growthRate;
 
@@ -52,22 +51,20 @@ isSimulationRunning = true;
 while isSimulationRunning
   t = t+1;
   
-  [landscape, inventory] = Collect(landscape, inventory, positions, hunger, collectionRate);
-  %[hunger, inventory] = EatResources(hunger, inventory, hungerRate);
-  %[positions, inventory, hunger] = KillAgents(positions, inventory, hunger);
+  [landscape, inventory] = Collect(landscape, inventory, positions, collectionRate);
+  [inventory, positions] = EatResources(inventory, positions, hungerRate);
   
   positions = UpdatePositions(positions, landscape, diffusionRate);
 
-  if mod(t, 200) == 0
+  if mod(t, growthRateResetInterval) == 0
     disp("growth reset");
     growthRate = InitializeGrid(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
     collectionRate = collectionGrowthRatio * growthRate;
   end
   
-  
   landscape = GrowResources(landscape, growthRate);
-  landscape = landscape + rand(gridLength)*0.000001;
-
+  landscape = landscape + rand(gridLength)*landscapeNoise;
+  
   % Apply resource level limits
   landscape = Clamp(landscape, minResourceLevel, maxResourceLevel);
     

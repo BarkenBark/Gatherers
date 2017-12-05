@@ -1,4 +1,4 @@
-function [grid, inventory] = Collect(grid, inventory, positions, hunger, collectionRate)
+function [grid, inventory] = Collect(grid, inventory, positions,collectionRate)
   %Currently returns the harvested grid, but should also return the
   %collected resources for the agents. 
   
