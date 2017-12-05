@@ -1,6 +1,6 @@
 function agentsHandle = PlotAgents(positions, agentColor, agentsHandle)
   %First time, call function without second argument to create new handle
-
+    
   if ~exist('agentsHandle', 'var')
     agentsHandle = scatter(positions(:,2), positions(:,1),...
       75, '.', ...

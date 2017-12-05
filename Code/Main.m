@@ -4,12 +4,12 @@ close all;
 
 %Problem Parameters
 gridLength = 100;
-initialNbrOfAgents = 4000;
+initialNbrOfAgents = 1000;
 diffusionRate = 0.6;
 hungerRate = 0.001;
 craziness = 0.05;
-collectionGrowthRatio = 1.3;
-growthRateResetInterval = 800;
+collectionGrowthRatio = 10;
+growthRateResetInterval = 400;
 landscapeNoise = 10^(-6);
 
 percentHigherResources = 0.01;
@@ -29,7 +29,7 @@ landscapeTitleString = 'Landscape';
 agentColor = [1 0 0];
 
 %Initial lanscape state
-landscape = ones(gridLength) * 0.01 + rand(gridLength)*landscapeNoise;
+landscape = ones(gridLength) + rand(gridLength)*landscapeNoise;
 growthRate = RandomNoisePattern(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
 collectionRate = collectionGrowthRatio * growthRate;
 
