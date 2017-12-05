@@ -6,13 +6,13 @@ close all;
 gridLength = 100;
 initialNbrOfAgents = 1000;
 diffusionRate = 0.4;
-growthRate = ones(gridLength) .* 0.01;
 hungerRate = 0.1;
-collectionRate = 10*growthRate;
+collectionGrowthRatio = 10;
 
-percentBestLand = 0.01;
+percentHigherResources = 0.01;
 minResourceLevel = 0;
 maxResourceLevel = 1;
+maxGrowthRate = 1;
 
 diffusionSteps = 20;
 eps = 0.01; %Always add this value to all resorces to make sure complete depletion doesn't permanently destroy the field
@@ -27,12 +27,13 @@ figureSize = 800;
 landscapeTitleString = 'Landscape';
 agentColor = [1 0 0];
 
-%Misc setting
-
+%Initial lanscape state
+growthRate = ones(gridLength) .* 0.01;
+landscape = ones(gridLength) * 0.2;
+growthRate = InitializeGrid(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
+collectionRate = collectionGrowthRatio * growthRate;
 
 %% Run simulation
-landscape = ones(gridLength) * 0.2;%InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
-growthRate = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
 [positions, inventory, hunger] = InitializeAgents(initialNbrOfAgents, gridLength);
 %WARNING: stateVector(i,:) should always correspond to the ith agent
 
@@ -56,19 +57,11 @@ while isSimulationRunning
   %[positions, inventory, hunger] = KillAgents(positions, inventory, hunger);
   
   positions = UpdatePositions(positions, landscape, diffusionRate);
-  
-%   smoothRate = 0.05;
-%    growthRate = imfilter(growthRate, [
-%      0, 1, 0;
-%      1, 2, 1;
-%      0, 1, 0
-%    ] ./ 6, 'circular');
-  %growthRate = growthRate + 0.000001;
-  
-  if mod(t,200) == 0
-      disp("growth reset");
-    growthRate = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps);
-    collectionRate = 10*growthRate;
+
+  if mod(t, 200) == 0
+    disp("growth reset");
+    growthRate = InitializeGrid(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
+    collectionRate = collectionGrowthRatio * growthRate;
   end
   
   

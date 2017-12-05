@@ -11,25 +11,24 @@ neighbors = [
 noise=0.05;
 nbNeighbors = length(neighbors);
 gridLength = length(grid);
-% willMove = rand(numberOfAgents) < diffusionRate;
 
-moveLikeliness = grid;%imfilter(grid, ones(3^2)./3^2, 'circular');
-moveLikeliness = (1-noise).*moveLikeliness + noise.*rand(gridLength);
+moveLikeliness = (1-noise).*grid + noise.*rand(gridLength);
+
+neighborsValues = NaN([nbNeighbors 1]);
 
 for iAgent=1:numberOfAgents
     agentPos = positions(iAgent,:);
-    willMove = rand() < (diffusionRate * (1-grid(agentPos(1), agentPos(2))));
+    willMove = rand() < (diffusionRate * (1-grid(agentPos(1), agentPos(2)))); % TODO could be optimized
     if willMove
         neighborsPos = agentPos + neighbors;
         
         % Apply periodic boundary condition
         neighborsPos = mod(neighborsPos - 1, gridLength) + 1;
         
-        neighborsValues = zeros([nbNeighbors 1]);
         for i = 1:nbNeighbors
-           neighborsValues(i) = moveLikeliness(neighborsPos(i,1),neighborsPos(i,2));%(1-noise)*grid(neighborsPos(i,1),neighborsPos(i,2))+noise*rand();
+           neighborsValues(i) = moveLikeliness(neighborsPos(i,1),neighborsPos(i,2)); % TODO could be optimized
         end
-        [~, indexMaxValue] = max(neighborsValues);
+        [~, indexMaxValue] = max(neighborsValues); % TODO could be optimized
         tempPositions(iAgent,:) = neighborsPos(indexMaxValue,:);
     end
 end
