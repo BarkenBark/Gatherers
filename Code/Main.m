@@ -6,10 +6,10 @@ close all;
 gridLength = 100;
 initialNbrOfAgents = 1000;
 diffusionRate = 0.6;
-hungerRate = 0.001;
+hungerRate = 0.03;
 craziness = 0.05;
-collectionGrowthRatio = 10;
-growthRateResetInterval = 400;
+collectionRate= 0.1;
+growthRateResetInterval = 600;
 landscapeNoise = 10^(-6);
 
 percentHigherResources = 0.01;
@@ -29,9 +29,8 @@ landscapeTitleString = 'Landscape';
 agentColor = [1 0 0];
 
 %Initial lanscape state
-landscape = ones(gridLength) + rand(gridLength)*landscapeNoise;
+landscape = ones(gridLength)*maxResourceLevel + rand(gridLength)*landscapeNoise;
 growthRate = RandomNoisePattern(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
-collectionRate = collectionGrowthRatio * growthRate;
 
 %% Run simulation
 [positions, inventory, hunger] = InitializeAgents(initialNbrOfAgents, gridLength);
@@ -60,7 +59,6 @@ while isSimulationRunning
   if mod(t, growthRateResetInterval) == 0
     disp('growth reset');
     growthRate = RandomNoisePattern(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
-    collectionRate = collectionGrowthRatio * growthRate;
   end
   
   landscape = GrowResources(landscape, growthRate);
