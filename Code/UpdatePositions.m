@@ -1,4 +1,4 @@
-function positions = UpdatePositions(positions, grid, diffusionRate)
+function positions = UpdatePositions(positions, grid, diffusionRate, craziness)
 
 numberOfAgents = size(positions,1);
 tempPositions = positions;
@@ -8,11 +8,11 @@ neighbors = [
     -1  0;
     +1  0;
 ];
-noise=0.05;
+
 nbNeighbors = length(neighbors);
 gridLength = length(grid);
 
-moveLikeliness = (1-noise).*grid + noise.*rand(gridLength);
+moveLikeliness = (1-craziness).*grid + craziness.*rand(gridLength);
 
 neighborsValues = NaN([nbNeighbors 1]);
 

@@ -4,9 +4,10 @@ close all;
 
 %Problem Parameters
 gridLength = 100;
-initialNbrOfAgents = 1000;
-diffusionRate = 0.2;
+initialNbrOfAgents = 4000;
+diffusionRate = 0.6;
 hungerRate = 0.005;
+craziness = 0.05;
 collectionGrowthRatio = 10;
 growthRateResetInterval = 800;
 landscapeNoise = 10^(-6);
@@ -54,10 +55,10 @@ while isSimulationRunning
   [landscape, inventory] = Collect(landscape, inventory, positions, collectionRate);
   [inventory, positions] = EatResources(inventory, positions, hungerRate);
   
-  positions = UpdatePositions(positions, landscape, diffusionRate);
+  positions = UpdatePositions(positions, landscape, diffusionRate, craziness);
 
   if mod(t, growthRateResetInterval) == 0
-    disp("growth reset");
+    disp('growth reset');
     growthRate = RandomNoisePattern(gridLength, percentHigherResources, maxGrowthRate, diffusionSteps);
     collectionRate = collectionGrowthRatio * growthRate;
   end
