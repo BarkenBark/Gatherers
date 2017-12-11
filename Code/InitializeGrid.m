@@ -1,4 +1,4 @@
-function grid = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps)
+function grid = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, diffusionSteps, k)
     averagingFilterSize = 3;
     
     grid = zeros(gridLength);
@@ -9,4 +9,8 @@ function grid = InitializeGrid(gridLength, percentBestLand, maxResourceLevel, di
     for i = 1:diffusionSteps
         grid = imfilter(grid, diffusionFilter, 'circular');
     end
+    
+    normalizingFactor = k/sum(sum(grid));
+    grid = grid*normalizingFactor;
+    
 end
