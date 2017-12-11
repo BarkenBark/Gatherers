@@ -1,4 +1,4 @@
-function grid = RandomNoisePattern(gridLength, percentHighestValue, maxValue, diffusionSteps)
+function grid = RandomNoisePattern(gridLength, percentHighestValue, maxValue, diffusionSteps, k)
     averagingFilterSize = 3;
     
     grid = zeros(gridLength);
@@ -9,4 +9,8 @@ function grid = RandomNoisePattern(gridLength, percentHighestValue, maxValue, di
     for i = 1:diffusionSteps
         grid = imfilter(grid, diffusionFilter, 'circular');
     end
+    
+    normalizingFactor = k/sum(sum(grid));
+    grid = grid*normalizingFactor;
+    
 end
